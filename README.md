@@ -17,7 +17,6 @@ This project uses an ESP32 to control a light and a fan through voice commands. 
 - ArduinoJson – Handles JSON data used by Sinric Pro.
 - WebSockets – Enables communication with the Sinric Pro service.
 
-SinricProSwitch.h – Controls the light and fan using ON/OFF commands.
 ## ⚙️ How It Works
 1. Give a voice command through Google Home.
 2. Sinric Pro sends the command over Wi-Fi.
