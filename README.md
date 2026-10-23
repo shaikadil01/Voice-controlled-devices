@@ -66,28 +66,6 @@ This project uses an **ESP32 microcontroller** to control a light and a fan thro
 | 🌀 Fan | Controlled appliance |
 | 🔋 Power Supply | Provides power |
 
-## 🧠 System Architecture
-
-The command travels from your voice assistant to the physical appliance.
-
-```mermaid
-flowchart TD
-    A["🎙️ Google Home"] --> B["☁️ Sinric Pro Cloud"]
-    B --> C["📶 Wi-Fi"]
-    C --> D["⚡ ESP32"]
-    D --> E["🔌 Relay Module"]
-    E --> F["💡 Light"]
-    E --> G["🌀 Fan"]
-
-    style A fill:#DCEBFF,stroke:#4285F4,color:#15243B
-    style B fill:#EDE2FF,stroke:#8B5CF6,color:#30204A
-    style C fill:#D9F4FF,stroke:#06A6C7,color:#143744
-    style D fill:#D7FBE8,stroke:#10A36A,color:#153B2B
-    style E fill:#FFF0CC,stroke:#E7A126,color:#493719
-    style F fill:#FFF9D6,stroke:#D7B400,color:#403600
-    style G fill:#FFE3E8,stroke:#E85D75,color:#49202A
-```
-
 
 
 ## 🧠 Interactive System Architecture
