@@ -1,6 +1,4 @@
-# Voice-controlled-devices
-
-# Voice-Controlled Devices Using Google Assistant
+# Voice-Controlled Devices Using voice Assistant
 
 ## 📌 About the Project
 This project uses an ESP32 to control a light and a fan through voice commands. It uses Wi-Fi and Sinric Pro to connect the devices with Google Home.
