@@ -1,140 +1,190 @@
-# ⚡ Voice-Controlled Devices Using Google Assistant
+# ⚡ Voice-Controlled Smart Home Automation
 
 <div align="center">
 
-### 🏠 A Simple Smart Home Automation Project
+### 🏠 Your Voice. Your Home. Your Control.
 
-Control your **light and fan using voice commands** with an ESP32, Wi-Fi, Sinric Pro, and Google Home.
+A simple and affordable IoT project that lets you control your **light 💡 and fan 🌀 using voice commands** with ESP32, Wi-Fi, Sinric Pro, and Google Home.
 
-![ESP32](https://img.shields.io/badge/Controller-ESP32-red?style=for-the-badge&logo=espressif&logoColor=white)
-![Arduino](https://img.shields.io/badge/IDE-Arduino-00979D?style=for-the-badge&logo=arduino&logoColor=white)
-![WiFi](https://img.shields.io/badge/Connection-Wi--Fi-blue?style=for-the-badge&logo=wifi&logoColor=white)
-![IoT](https://img.shields.io/badge/Technology-IoT-purple?style=for-the-badge)
+<br/>
+
+![ESP32](https://img.shields.io/badge/ESP32-Microcontroller-red?style=for-the-badge&logo=espressif&logoColor=white)
+![Arduino](https://img.shields.io/badge/Arduino-IDE-00979D?style=for-the-badge&logo=arduino&logoColor=white)
+![WiFi](https://img.shields.io/badge/Wi--Fi-Connected-blue?style=for-the-badge&logo=wifi&logoColor=white)
+![IoT](https://img.shields.io/badge/Technology-IoT-8A2BE2?style=for-the-badge)
+
+**Simple Setup • Smart Control • Low-Cost Design**
 
 </div>
 
 ---
 
-## 📌 About the Project
+## 📑 Table of Contents
 
-This project makes controlling home appliances easier using voice commands. An ESP32 connects to Wi-Fi and communicates with Sinric Pro, allowing Google Home to control a light and a fan.
+- [🌟 About the Project](#-about-the-project)
+- [✨ Features](#-features)
+- [🛠️ Components Required](#️-components-required)
+- [🧠 System Architecture](#-system-architecture)
+- [📚 Libraries Used](#-libraries-used)
+- [🔌 Pin Connections](#-pin-connections)
+- [🚀 Getting Started](#-getting-started)
+- [🎙️ Voice Commands](#️-voice-commands)
+- [✅ Project Result](#-project-result)
+- [🔮 Future Improvements](#-future-improvements)
 
-🎯 **Main Goal:** Build a simple, affordable, and easy-to-use smart home automation system.
+---
 
-## ✨ Key Features
+## 🌟 About the Project
 
-- 🎙️ **Voice Control** — Switch appliances on or off using voice commands.
-- 📶 **Wi-Fi Connectivity** — Connect the ESP32 to the internet.
-- 💡 **Two-Device Control** — Operate a light and a fan independently.
-- ☁️ **Cloud Integration** — Use Sinric Pro to connect the ESP32 with Google Home.
-- 💰 **Low-Cost Design** — Built using commonly available electronic components.
+Imagine controlling your home appliances without pressing a switch!
 
-## 🛠️ Hardware Components
+This project uses an **ESP32 microcontroller** to control a light and a fan through voice commands. Google Home receives your command, while Sinric Pro connects the voice-control system to the ESP32 over Wi-Fi.
 
-| Component | Purpose |
+🎯 **Our goal:** To demonstrate how everyday appliances can be controlled using affordable IoT technology.
+
+## ✨ Features
+
+| Feature | Description |
 |---|---|
-| ESP32 Development Board | Main controller |
-| 2-Channel 5V Relay Module | Switches the light and fan |
-| Jumper Wires | Connect the components |
-| Light and Fan | Devices being controlled |
-| Power Supply | Powers the circuit |
+| 🎙️ Voice Control | Control appliances using spoken commands |
+| 💡 Light Control | Switch the light ON or OFF |
+| 🌀 Fan Control | Switch the fan ON or OFF |
+| ☁️ Cloud Connectivity | Communicate through Sinric Pro |
+| 📶 Wireless Operation | Connect through Wi-Fi |
+| 💰 Budget-Friendly | Uses common electronic components |
 
-## 📚 Libraries Used
+---
 
-| Library | Purpose |
+## 🛠️ Components Required
+
+| Component | Function |
 |---|---|
-| `Arduino.h` | Provides basic Arduino functions |
-| `WiFi.h` | Connects the ESP32 to Wi-Fi |
-| `SinricPro.h` | Connects the ESP32 to Sinric Pro |
-| `SinricProSwitch.h` | Handles appliance switch control |
-| `ArduinoJson` | Handles JSON data |
-| `WebSockets` | Supports cloud communication |
+| ⚡ ESP32 | Main controller |
+| 🔌 2-Channel 5V Relay | Switches the appliances |
+| 🧵 Jumper Wires | Connect the circuit |
+| 💡 Light | Controlled appliance |
+| 🌀 Fan | Controlled appliance |
+| 🔋 Power Supply | Provides power |
 
-**Note:** `Arduino.h` and `WiFi.h` are provided by the ESP32 board package. Install the SinricPro library through the Arduino IDE Library Manager and ensure its required dependencies are installed.
+## 🧠 System Architecture
 
-## ⚙️ How It Works
+The command travels from your voice assistant to the physical appliance.
 
 ```mermaid
 flowchart TD
-    A["🎙️ Google Home"] --> B["☁️ Sinric Pro"]
+    A["🎙️ Google Home"] --> B["☁️ Sinric Pro Cloud"]
     B --> C["📶 Wi-Fi"]
     C --> D["⚡ ESP32"]
-    D --> E["🔌 2-Channel Relay"]
+    D --> E["🔌 Relay Module"]
     E --> F["💡 Light"]
     E --> G["🌀 Fan"]
+
+    style A fill:#DCEBFF,stroke:#4285F4,color:#15243B
+    style B fill:#EDE2FF,stroke:#8B5CF6,color:#30204A
+    style C fill:#D9F4FF,stroke:#06A6C7,color:#143744
+    style D fill:#D7FBE8,stroke:#10A36A,color:#153B2B
+    style E fill:#FFF0CC,stroke:#E7A126,color:#493719
+    style F fill:#FFF9D6,stroke:#D7B400,color:#403600
+    style G fill:#FFE3E8,stroke:#E85D75,color:#49202A
 ```
+
+### ⚙️ How It Works
 
 1. Speak a command to Google Home.
 2. Sinric Pro processes the command through the cloud.
 3. The ESP32 receives the command over Wi-Fi.
 4. The relay switches the selected appliance ON or OFF.
 
+---
+
+## 📚 Libraries Used
+
+| Library | Purpose |
+|---|---|
+| `Arduino.h` | Provides basic Arduino functions |
+| `WiFi.h` | Connects ESP32 to Wi-Fi |
+| `SinricPro.h` | Connects ESP32 to Sinric Pro |
+| `SinricProSwitch.h` | Handles light and fan switch commands |
+| `ArduinoJson` | Supports JSON data handling |
+| `WebSockets` | Supports real-time communication |
+
+**Installation:** Install the ESP32 board package and the SinricPro library through Arduino IDE's Library Manager. Install any additional dependencies required by your installed SinricPro version.
+
 ## 🔌 Pin Connections
 
-| Appliance | ESP32 GPIO Pin |
-|---|---|
-| 💡 Light | `GPIO 13` |
-| 🌀 Fan | `GPIO 14` |
+| Appliance | ESP32 Pin | Function |
+|---|---|---|
+| 💡 Light | `GPIO 13` | Light control |
+| 🌀 Fan | `GPIO 14` | Fan control |
 
-## 💻 Software Requirements
-
-- Arduino IDE
-- ESP32 board package
-- Sinric Pro account and library
-- Google Home app or compatible Google Home device
+---
 
 ## 🚀 Getting Started
 
-**Step 1 — Install the Software**
+### 1️⃣ Install the Software
 
 Install Arduino IDE, the ESP32 board package, and the required libraries.
 
-**Step 2 — Configure Your Credentials**
+### 2️⃣ Configure the Credentials
 
 Add your Wi-Fi details, Sinric Pro App Key, App Secret, and device IDs to the code.
 
-**Step 3 — Upload the Code**
+### 3️⃣ Connect the Hardware
 
-Connect your ESP32 to your computer and upload the program through Arduino IDE.
+Connect the ESP32 to the two-channel relay module according to your circuit diagram.
 
-**Step 4 — Connect Google Home**
+### 4️⃣ Upload the Program
 
-Link your Sinric Pro account with Google Home and set up your devices.
+Connect the ESP32 to your computer, select the correct board and port, then upload the code.
 
-**Step 5 — Test the Project**
+### 5️⃣ Connect Google Home
 
-Use the supported voice commands to control the light and fan.
+Link your Sinric Pro account with Google Home and configure your devices.
+
+### 6️⃣ Test Your Project
+
+Speak the commands below and check whether the correct appliance responds.
+
+---
 
 ## 🎙️ Voice Commands
 
-| Voice Command | Action |
+<div align="center">
+
+| 🗣️ Say This | 🎯 Expected Action |
 |---|---|
-| 🟢 "Hey Google, turn on the light" | Switches the light ON |
-| 🔴 "Hey Google, turn off the light" | Switches the light OFF |
-| 🟢 "Hey Google, turn on the fan" | Switches the fan ON |
-| 🔴 "Hey Google, turn off the fan" | Switches the fan OFF |
+| "Hey Google, turn on the light" | 💡 Light ON |
+| "Hey Google, turn off the light" | 🌑 Light OFF |
+| "Hey Google, turn on the fan" | 🌀 Fan ON |
+| "Hey Google, turn off the fan" | ⏹️ Fan OFF |
+
+</div>
+
+---
 
 ## ✅ Project Result
 
-The project demonstrates how an affordable IoT system can control a light and a fan using voice commands. It combines ESP32, Wi-Fi, Sinric Pro, and Google Home to demonstrate the basic concept of smart home automation.
+The project demonstrates how an ESP32-based IoT system can control a light and a fan through voice commands. It combines wireless connectivity and cloud communication to bring basic smart home automation to life.
 
 ## 🔮 Future Improvements
 
-- ➕ Add more home appliances.
-- 📱 Add device monitoring through a mobile app.
-- 🏡 Expand the system into a larger smart home network.
-- 📊 Add energy monitoring features.
+- 🏡 Add more home appliances.
+- 📱 Include mobile-based monitoring and control.
+- 📊 Add electricity consumption monitoring.
+- 🤖 Expand the system with additional smart home features.
 
-## 🔐 Security Notice
+---
 
-**Never upload your real Wi-Fi password, Sinric Pro App Secret, or other private credentials to a public GitHub repository.** Use placeholders or secure configuration methods instead.
+## 🔐 Security First
+
+Never publish your real Wi-Fi password or Sinric Pro App Secret in a public repository. Replace private credentials with placeholders before uploading the code to GitHub, and rotate any credentials that have already been exposed.
 
 ---
 
 <div align="center">
 
-### 💙 Built with ESP32 and IoT Technology
+### 💙 Built with ESP32 | Powered by IoT
 
-*Making everyday device control smarter, simpler, and more convenient.*
+**Making everyday life smarter, one voice command at a time.** ⚡
 
 </div>
