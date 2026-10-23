@@ -14,6 +14,8 @@ This project uses an ESP32 to control a light and a fan through voice commands. 
 - Arduino.h – Provides basic Arduino functions
 - WiFi.h – Connects the ESP32 to Wi-Fi
 - SinricPro.h – Connects the ESP32 to the Sinric Pro cloud
+- ArduinoJson – Handles JSON data used by Sinric Pro.
+- WebSockets – Enables communication with the Sinric Pro service.
 
 SinricProSwitch.h – Controls the light and fan using ON/OFF commands.
 ## ⚙️ How It Works
