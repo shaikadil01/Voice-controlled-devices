@@ -6,23 +6,23 @@
 
 /* ================= WIFI ================= */
 
-char ssid[] = "G";
-char pass[] = "123456789";
+char ssid[] = "YOUR WIFI NAME";
+char pass[] = "YOUR WIFI PASSWORD";
 
 /* ================= SINRIC PRO ================= */
 
-#define APP_KEY "9a05f916-1efe-4e75-830c-87cc70f0fa7d"
+#define APP_KEY "YOUR APP KEY"
 
-#define APP_SECRET "379d9804-a479-4504-b565-e26094377601-4466d061-c322-4667-a6ca-7eff0ca65450-4466d061-c322-4667-a6ca-7eff0ca65450"
+#define APP_SECRET "YOUR APP SECRET KEY"
 
 /* ================= LIGHT DEVICE ================= */
 
-#define LIGHT_DEVICE_ID "6a3001f6969af7ec2454250d"
+#define LIGHT_DEVICE_ID "YOUR LIGHT ID"
 
 /* ================= FAN DEVICE ================= */
 
 // Replace this with your Fan device ID from Sinric Pro
-#define FAN_DEVICE_ID "6ab4b877b597c4e1235321ba"
+#define FAN_DEVICE_ID "YOUR FAN ID"
 
 /* ================= PINS ================= */
 
