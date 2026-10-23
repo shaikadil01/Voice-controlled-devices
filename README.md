@@ -87,12 +87,20 @@ flowchart TD
     style F fill:#FFF9D6,stroke:#D7B400,color:#403600
     style G fill:#FFE3E8,stroke:#E85D75,color:#49202A
 ```
+
+
+
 ## 🧠 Interactive System Architecture
 
 Explore how voice commands travel from Google Home
 to the ESP32 and control the light and fan.
 
 👉 [Open Interactive Architecture]([https://shaikadil01.github.io/YOUR-REPOSITORY/system-architecture.html](https://shaikadil01.github.io/Voice-controlled-devices/system-architecture.html))
+
+
+
+
+
 ### ⚙️ How It Works
 
 1. Speak a command to Google Home.
