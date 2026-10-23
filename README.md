@@ -9,7 +9,13 @@ This project uses an ESP32 to control a light and a fan through voice commands. 
 - Jumper wires
 - Light and fan
 - Power supply
+- 
+📚 Libraries Used
+Arduino.h – Provides basic Arduino functions.
+WiFi.h – Connects the ESP32 to Wi-Fi.
+SinricPro.h – Connects the ESP32 to the Sinric Pro cloud.
 
+SinricProSwitch.h – Controls the light and fan using ON/OFF commands.
 ## ⚙️ How It Works
 1. Give a voice command through Google Home.
 2. Sinric Pro sends the command over Wi-Fi.
