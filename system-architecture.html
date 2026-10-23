@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0b1020" />
+<title>Interactive System Architecture | Voice-Controlled Smart Home</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #080d1b;
+    --panel: rgba(18, 27, 49, .82);
+    --line: rgba(148, 163, 184, .22);
+    --muted: #9ba9c3;
+    --text: #edf4ff;
+    --cyan: #56d8ff;
+    --violet: #ac8bff;
+    --green: #65e6b0;
+    --amber: #ffc66d;
+    --pink: #ff8ca5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh; padding: 34px 18px 42px;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background: radial-gradient(ellipse at 15% 0%, rgba(76, 106, 255, .19), transparent 34%),
+                radial-gradient(ellipse at 92% 18%, rgba(26, 202, 213, .12), transparent 30%), var(--bg);
+  }
+  .shell { max-width: 1240px; margin: 0 auto; }
+  .hero { text-align: center; margin: 8px auto 28px; max-width: 820px; }
+  .eyebrow { display: inline-flex; gap: 8px; align-items: center; padding: 7px 12px; border: 1px solid rgba(86,216,255,.28); border-radius: 999px; color: #a8edff; background: rgba(86,216,255,.08); font-size: 12px; font-weight: 750; letter-spacing: .11em; text-transform: uppercase; }
+  h1 { margin: 18px 0 10px; font-size: clamp(30px, 4.7vw, 52px); letter-spacing: -.045em; line-height: 1.08; }
+  h1 span { background: linear-gradient(90deg, #74e4ff, #b69bff 58%, #76efc1); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .subtitle { color: var(--muted); font-size: 16px; line-height: 1.7; margin: 0 auto; max-width: 690px; }
+  .panel { background: var(--panel); border: 1px solid var(--line); box-shadow: 0 24px 80px rgba(0,0,0,.25); border-radius: 22px; overflow: hidden; backdrop-filter: blur(12px); }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; border-bottom: 1px solid var(--line); }
+  .panel-head h2 { font-size: 15px; margin: 0; letter-spacing: .02em; }
+  .live-pill { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: #b7c5dd; white-space: nowrap; }
+  .live-dot { width: 8px; height: 8px; border-radius: 99px; background: var(--green); box-shadow: 0 0 13px rgba(101,230,176,.7); }
+  .diagram-wrap { overflow-x: auto; padding: 12px 12px 0; scrollbar-color: #344563 transparent; }
+  svg { display: block; width: 100%; min-width: 890px; height: auto; }
+  .connector { fill: none; stroke: #42516e; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .connector.active { stroke: var(--cyan); stroke-width: 4; filter: drop-shadow(0 0 6px rgba(86,216,255,.6)); }
+  .node { cursor: pointer; outline: none; }
+  .node .node-box { fill: #111c32; stroke: #344562; stroke-width: 1.5; transition: stroke .2s, fill .2s, filter .2s; }
+  .node:hover .node-box, .node:focus-visible .node-box { stroke: #8a9fca; }
+  .node.selected .node-box { stroke: var(--cyan); stroke-width: 2.5; fill: #142b43; filter: drop-shadow(0 0 12px rgba(86,216,255,.18)); }
+  .node-title { fill: #f3f7ff; font-size: 15px; font-weight: 750; text-anchor: middle; pointer-events: none; }
+  .node-sub { fill: #9ba9c3; font-size: 11.5px; text-anchor: middle; pointer-events: none; }
+  .node-icon { font-size: 24px; text-anchor: middle; pointer-events: none; }
+  .micro-label { fill: #7f91af; font-size: 10px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
+  .branch-label { fill: #a8b7d1; font-size: 11px; font-weight: 700; }
+  .details-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(270px, .75fr); gap: 14px; padding: 16px; }
+  .detail-card, .action-card { border-radius: 16px; border: 1px solid var(--line); background: rgba(7, 13, 27, .48); padding: 20px; min-width: 0; }
+  .detail-label { color: var(--cyan); text-transform: uppercase; letter-spacing: .12em; font-size: 10px; font-weight: 800; }
+  .detail-title { margin: 9px 0 8px; font-size: 22px; letter-spacing: -.025em; }
+  .detail-description { color: #b4c0d5; line-height: 1.65; font-size: 14px; margin: 0; }
+  .detail-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .tag { border: 1px solid rgba(148,163,184,.22); background: rgba(148,163,184,.08); padding: 6px 9px; border-radius: 8px; color: #c4d1e8; font-size: 11px; }
+  .action-card h3 { margin: 0 0 8px; font-size: 16px; }
+  .action-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+  .buttons { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+  button { border: 0; cursor: pointer; border-radius: 10px; padding: 11px 14px; color: #071321; background: linear-gradient(110deg, #75e2ff, #9aeed0); font-size: 12px; font-weight: 800; transition: transform .15s, filter .15s; }
+  button:hover { transform: translateY(-1px); filter: brightness(1.06); }
+  button:focus-visible { outline: 3px solid rgba(86,216,255,.65); outline-offset: 3px; }
+  button.secondary { background: rgba(148,163,184,.1); color: #d8e4f7; border: 1px solid var(--line); }
+  button:disabled { opacity: .6; cursor: wait; transform: none; }
+  .status { margin-top: 12px !important; min-height: 21px; color: #a9eaff !important; }
+  .legend { display: flex; gap: 18px; flex-wrap: wrap; padding: 0 22px 20px; color: #91a0ba; font-size: 11px; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .legend i { display: inline-block; width: 16px; height: 3px; border-radius: 4px; background: #42516e; }
+  .legend i.active-line { background: var(--cyan); box-shadow: 0 0 8px rgba(86,216,255,.45); }
+  .footnote { text-align: center; color: #7787a2; font-size: 11px; line-height: 1.6; margin: 18px auto 0; max-width: 780px; }
+  @media (max-width: 700px) { body { padding: 22px 10px 28px; } .details-grid { grid-template-columns: 1fr; } .panel-head { padding: 15px; } .detail-card, .action-card { padding: 16px; } .diagram-wrap { padding-left: 4px; padding-right: 4px; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<main class="shell">
+  <header class="hero">
+    <div class="eyebrow">⚡ Interactive system map</div>
+    <h1>Voice-Controlled <span>Smart Home</span></h1>
+    <p class="subtitle">Explore how a voice command travels through Google Home, Sinric Pro, Wi-Fi, and the ESP32 to switch a light or fan.</p>
+  </header>
+
+  <section class="panel" aria-label="Interactive system architecture">
+    <div class="panel-head">
+      <h2>🧠 SYSTEM ARCHITECTURE</h2>
+      <div class="live-pill"><span class="live-dot"></span> Interactive demo</div>
+    </div>
+    <div class="diagram-wrap">
+      <svg id="architecture" viewBox="0 0 1200 440" role="img" aria-label="Click a system component to learn about it. Use Trace voice command to animate the command path.">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#42516e" /></marker>
+          <marker id="arrowActive" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#56d8ff" /></marker>
+        </defs>
+        <text x="28" y="35" class="micro-label">VOICE COMMAND</text>
+        <text x="901" y="35" class="micro-label">DEVICE SWITCHING</text>
+        <path id="link-google-sinric" class="connector" d="M205 145 H255" marker-end="url(#arrow)" />
+        <path id="link-sinric-wifi" class="connector" d="M440 145 H490" marker-end="url(#arrow)" />
+        <path id="link-wifi-esp" class="connector" d="M635 145 H685" marker-end="url(#arrow)" />
+        <path id="link-esp-relay" class="connector" d="M850 145 H900" marker-end="url(#arrow)" />
+        <path id="link-relay-light" class="connector" d="M985 195 V250 H900 V292" marker-end="url(#arrow)" />
+        <path id="link-relay-fan" class="connector" d="M985 250 H1080 V292" marker-end="url(#arrow)" />
+        <text x="1000" y="238" class="branch-label">Independent outputs</text>
+
+        <g class="node selected" data-node="google" role="button" tabindex="0" aria-label="Google Home: select details" aria-pressed="true">
+          <rect class="node-box" x="35" y="95" width="170" height="100" rx="16" />
+          <text class="node-icon" x="120" y="128">🎙️</text><text class="node-title" x="120" y="153">Google Home</text><text class="node-sub" x="120" y="173">Voice assistant</text>
+        </g>
+        <g class="node" data-node="sinric" role="button" tabindex="0" aria-label="Sinric Pro: select details" aria-pressed="false">
+          <rect class="node-box" x="255" y="95" width="185" height="100" rx="16" />
+          <text class="node-icon" x="347.5" y="128">☁️</text><text class="node-title" x="347.5" y="153">Sinric Pro</text><text class="node-sub" x="347.5" y="173">Cloud connection</text>
+        </g>
+        <g class="node" data-node="wifi" role="button" tabindex="0" aria-label="Wi-Fi: select details" aria-pressed="false">
+          <rect class="node-box" x="490" y="95" width="145" height="100" rx="16" />
+          <text class="node-icon" x="562.5" y="128">📶</text><text class="node-title" x="562.5" y="153">Wi-Fi</text><text class="node-sub" x="562.5" y="173">Wireless network</text>
+        </g>
+        <g class="node" data-node="esp32" role="button" tabindex="0" aria-label="ESP32: select details" aria-pressed="false">
+          <rect class="node-box" x="685" y="95" width="165" height="100" rx="16" />
+          <text class="node-icon" x="767.5" y="128">⚡</text><text class="node-title" x="767.5" y="153">ESP32</text><text class="node-sub" x="767.5" y="173">Main controller</text>
+        </g>
+        <g class="node" data-node="relay" role="button" tabindex="0" aria-label="Relay module: select details" aria-pressed="false">
+          <rect class="node-box" x="900" y="95" width="170" height="100" rx="16" />
+          <text class="node-icon" x="985" y="128">🔌</text><text class="node-title" x="985" y="153">2-Channel Relay</text><text class="node-sub" x="985" y="173">Switching stage</text>
+        </g>
+        <g class="node" data-node="light" role="button" tabindex="0" aria-label="Light: select details" aria-pressed="false">
+          <rect class="node-box" x="825" y="292" width="150" height="92" rx="16" />
+          <text class="node-icon" x="900" y="323">💡</text><text class="node-title" x="900" y="348">Light</text><text class="node-sub" x="900" y="366">GPIO 13</text>
+        </g>
+        <g class="node" data-node="fan" role="button" tabindex="0" aria-label="Fan: select details" aria-pressed="false">
+          <rect class="node-box" x="1005" y="292" width="150" height="92" rx="16" />
+          <text class="node-icon" x="1080" y="323">🌀</text><text class="node-title" x="1080" y="348">Fan</text><text class="node-sub" x="1080" y="366">GPIO 14</text>
+        </g>
+      </svg>
+    </div>
+    <div class="legend"><span><i></i> Command path</span><span><i class="active-line"></i> Active path during trace</span><span>↖ Select any component for details</span></div>
+
+    <div class="details-grid">
+      <article class="detail-card" aria-live="polite">
+        <div class="detail-label">Component details</div>
+        <h3 class="detail-title" id="detail-title">🎙️ Google Home</h3>
+        <p class="detail-description" id="detail-description">Receives your spoken command, such as “turn on the light,” and passes the request through the linked smart-home service.</p>
+        <div class="detail-meta" id="detail-tags"><span class="tag">Voice input</span><span class="tag">User command</span></div>
+      </article>
+      <aside class="action-card">
+        <h3>▶ Trace a voice command</h3>
+        <p>Watch a sample command move through each stage of the system. This is a visual simulation; it does not connect to or control your physical appliances.</p>
+        <div class="buttons">
+          <button id="trace-btn" type="button">▶ Trace command</button>
+          <button id="reset-btn" class="secondary" type="button">↺ Reset diagram</button>
+        </div>
+        <p class="status" id="status" role="status">Ready — select a component or trace the command.</p>
+      </aside>
+    </div>
+  </section>
+  <p class="footnote">Project flow: Google Home → Sinric Pro Cloud → Wi-Fi → ESP32 → Relay Module → Light / Fan. GPIO mapping shown here: Light = GPIO 13, Fan = GPIO 14.</p>
+</main>
+<script>
+(() => {
+  const info = {
+    google: { title: '🎙️ Google Home', description: 'Receives your spoken command, such as “turn on the light,” and passes the request through the linked smart-home service.', tags: ['Voice input', 'User command'] },
+    sinric: { title: '☁️ Sinric Pro Cloud', description: 'Connects Google Home with your ESP32 project and routes the selected device’s ON/OFF command through the cloud.', tags: ['Cloud service', 'Device integration'] },
+    wifi: { title: '📶 Wi-Fi Network', description: 'Provides the network connection used by the ESP32 to communicate with Sinric Pro. The ESP32 must be connected to the configured network.', tags: ['Wireless connection', 'Internet access required'] },
+    esp32: { title: '⚡ ESP32 Controller', description: 'Runs the Arduino program, receives the device command, and updates the relevant relay output. This project maps the light to GPIO 13 and the fan to GPIO 14.', tags: ['Microcontroller', 'GPIO 13 / GPIO 14'] },
+    relay: { title: '🔌 2-Channel Relay Module', description: 'Uses its two relay channels to switch the light and fan independently in response to the ESP32 output signals.', tags: ['2 channels', 'Electrical isolation depends on module and wiring'] },
+    light: { title: '💡 Light', description: 'The light is the first controlled appliance. Its control signal is mapped to ESP32 GPIO 13 in this project.', tags: ['Output 1', 'GPIO 13'] },
+    fan: { title: '🌀 Fan', description: 'The fan is the second controlled appliance. Its control signal is mapped to ESP32 GPIO 14 in this project.', tags: ['Output 2', 'GPIO 14'] }
+  };
+  const nodes = [...document.querySelectorAll('.node')];
+  const links = [...document.querySelectorAll('.connector')];
+  const titleEl = document.getElementById('detail-title');
+  const descEl = document.getElementById('detail-description');
+  const tagsEl = document.getElementById('detail-tags');
+  const statusEl = document.getElementById('status');
+  const traceBtn = document.getElementById('trace-btn');
+  const resetBtn = document.getElementById('reset-btn');
+  let runToken = 0;
+  let selected = 'google';
+  const stages = [
+    { node: 'google', link: 'link-google-sinric', text: 'Google Home receives the voice command.' },
+    { node: 'sinric', link: 'link-sinric-wifi', text: 'Sinric Pro routes the command through the cloud.' },
+    { node: 'wifi', link: 'link-wifi-esp', text: 'The command travels through the Wi-Fi connection.' },
+    { node: 'esp32', link: 'link-esp-relay', text: 'The ESP32 processes the command.' },
+    { node: 'relay', link: 'link-relay-light', text: 'The relay switches the selected output.' },
+    { node: 'light', link: null, text: 'The light output is shown in this example.' }
+  ];
+  function selectNode(id) {
+    selected = id;
+    nodes.forEach(n => {
+      const active = n.dataset.node === id;
+      n.classList.toggle('selected', active);
+      n.setAttribute('aria-pressed', String(active));
+    });
+    const item = info[id];
+    titleEl.textContent = item.title;
+    descEl.textContent = item.description;
+    tagsEl.replaceChildren(...item.tags.map(label => {
+      const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = label; return tag;
+    }));
+  }
+  function clearLinks() { links.forEach(l => { l.classList.remove('active'); l.setAttribute('marker-end', 'url(#arrow)'); }); }
+  function reset() {
+    runToken++;
+    traceBtn.disabled = false;
+    clearLinks();
+    selectNode('google');
+    statusEl.textContent = 'Ready — select a component or trace the command.';
+  }
+  nodes.forEach(node => {
+    node.addEventListener('click', () => { runToken++; traceBtn.disabled = false; clearLinks(); selectNode(node.dataset.node); statusEl.textContent = 'Selected: ' + info[node.dataset.node].title.replace(/^\S+\s/, ''); });
+    node.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); node.dispatchEvent(new MouseEvent('click', { bubbles: true })); } });
+  });
+  traceBtn.addEventListener('click', async () => {
+    const thisRun = ++runToken;
+    clearLinks(); traceBtn.disabled = true;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    for (const stage of stages) {
+      if (thisRun !== runToken) return;
+      clearLinks();
+      selectNode(stage.node);
+      if (stage.link) {
+        const line = document.getElementById(stage.link);
+        line.classList.add('active'); line.setAttribute('marker-end', 'url(#arrowActive)');
+      }
+      statusEl.textContent = stage.text;
+      await new Promise(resolve => setTimeout(resolve, reducedMotion ? 250 : 850));
+    }
+    if (thisRun === runToken) {
+      clearLinks();
+      document.getElementById('link-relay-fan').classList.add('active');
+      document.getElementById('link-relay-fan').setAttribute('marker-end', 'url(#arrowActive)');
+      selectNode('fan'); statusEl.textContent = 'The fan is the second independent output (GPIO 14). Demo trace complete.';
+      traceBtn.disabled = false;
+    }
+  });
+  resetBtn.addEventListener('click', reset);
+})();
+</script>
+</body>
+</html>
