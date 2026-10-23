@@ -95,7 +95,7 @@ flowchart TD
 Explore how voice commands travel from Google Home
 to the ESP32 and control the light and fan.
 
-👉 [Open Interactive Architecture]([https://shaikadil01.github.io/YOUR-REPOSITORY/system-architecture.html](https://shaikadil01.github.io/Voice-controlled-devices/system-architecture.html))
+👉 [!Open Interactive Architecture]([https://shaikadil01.github.io/YOUR-REPOSITORY/system-architecture.html](https://shaikadil01.github.io/Voice-controlled-devices/system-architecture.html))
 
 
 
